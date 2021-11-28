@@ -2,6 +2,9 @@
 リモコンを紛失したりして動かなくなったラジコンカーをBLE経由でブラウザから操作できるようにするためのプログラム群です。
 ラジコンカーのモーターに任意のモータードライバ(DRV8835など)へはんだ付けし、toBLECar.inoをM5Stack Atom liteに書き込むことで動作します。
 
+UIに関してはこちらからお試しできます。
+https://henjin0.github.io/toBLECar/toBLECar.html
+
 M5Stack Atom liteへの書き込み手順は下記リンクを参照する。
 
 https://qiita.com/kmaepu/items/0c9400b2827e34e051fa
