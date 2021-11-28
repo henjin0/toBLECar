@@ -1,315 +1,196 @@
-<!doctype html>
+<!DOCTYPE html>
 <!--
 Copyright 2017-2020 JellyWare Inc. All Rights Reserved.
 -->
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="BlueJelly">
-    <meta name="viewport" content="width=640, maximum-scale=1.0, user-scalable=yes">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="BlueJelly" />
+    <meta
+      name="viewport"
+      content="width=640, maximum-scale=1.0, user-scalable=yes"
+    />
     <title>BlueJelly</title>
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet" type="text/css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
     <script type="text/javascript" src="bluejelly.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.9.0/nipplejs.min.js"
-    integrity="sha512-7PRZndBOTMkYqbGwO6dvNDozKEwaJYu3zPLoLv0rzOLMPQ2PVh6yaevCZOUL8+/n+A16fnLYEBKAlYXgMBn54w=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.9.0/nipplejs.min.js"
+      integrity="sha512-7PRZndBOTMkYqbGwO6dvNDozKEwaJYu3zPLoLv0rzOLMPQ2PVh6yaevCZOUL8+/n+A16fnLYEBKAlYXgMBn54w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
   </head>
 
-<body>
-  <div class="container">
-    <div class="row">
-      <div id="zone_joystick_r" style="width:100%;height:600px;background-color:skyblue;" class="rounded col">
-        dynamicR<br>アクセル</div>
-      <div id="zone_joystick_l" style="width:100%;height:600px;background-color:pink;" class="rounded col">dynamicL<br>ステア
+  <body>
+    <div class="container">
+      <div class="contents margin">
+        <button id="scan" class="button">SCAN</button>
+        <hr />
+        <div id="device_name"></div>
+        <div id="uuid_name"></div>
+        <div id="status"></div>
+      </div>
+      <div class="row">
+        <div
+          id="zone_joystick_r"
+          style="width: 100%; height: 450px; background-color: skyblue"
+          class="rounded col"
+        >
+          dynamicR<br />アクセル
+        </div>
+        <div
+          id="zone_joystick_l"
+          style="width: 100%; height: 450px; background-color: pink"
+          class="rounded col"
+        >
+          dynamicL<br />ステア
+        </div>
       </div>
     </div>
-  </div>
 
-<div class="container">
-    <div class="contents margin">
-        <button id="UP" class="button">UP</button>
-        <button id="DOWN" class="button">DOWN</button>
-        <button id="RIGHT" class="button">RIGHT</button>
-        <button id="LEFT" class="button">LEFT</button>
-        <button id="UPRIGHT" class="button">UPRIGHT</button>
-        <button id="DOWNRIGHT" class="button">DOWNRIGHT</button>
-        <button id="UPLEFT" class="button">UPLEFT</button>
-        <button id="DOWNLEFT" class="button">DOWNLEFT</button>
-        <hr>
-        <div id="device_name"> </div>
-        <div id="uuid_name"> </div>
-        <div id="status"> </div>
-    </div>
-</div>
-<script>
-//--------------------------------------------------
-//Global変数
-//--------------------------------------------------
-//BlueJellyのインスタンス生成
-const ble = new BlueJelly();
+    <script>
+      //--------------------------------------------------
+      //Global変数
+      //--------------------------------------------------
+      var FBpower = 0.0;
+      var LRpower = 0.0;
 
+      //BlueJellyのインスタンス生成
+      const ble = new BlueJelly();
 
-//--------------------------------------------------
-//ロード時の処理
-//--------------------------------------------------
-window.onload = function () {
-  //UUIDの設定
-  ble.setUUID("UUID1", "4fafc201-1fb5-459e-8fcc-c5c9c331914b", "beb5483e-36e1-4688-b7f5-ea07361b26a8");
-}
+      //--------------------------------------------------
+      //ロード時の処理
+      //--------------------------------------------------
+      window.onload = function () {
+        //UUIDの設定
+        ble.setUUID(
+          "UUID1",
+          "4fafc201-1fb5-459e-8fcc-c5c9c331914b",
+          "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+        );
+      };
 
+      //--------------------------------------------------
+      //Scan後の処理
+      //--------------------------------------------------
+      ble.onScan = function (deviceName) {
+        document.getElementById("device_name").innerHTML = deviceName;
+        document.getElementById("status").innerHTML = "found device!";
 
-//--------------------------------------------------
-//Scan後の処理
-//--------------------------------------------------
-ble.onScan = function (deviceName) {
-  document.getElementById('device_name').innerHTML = deviceName;
-  document.getElementById('status').innerHTML = "found device!";
-}
+        const send = function () {
+          sendBLE(FBpower, LRpower);
+        };
 
-
-//--------------------------------------------------
-//ConnectGATT後の処理
-//--------------------------------------------------
-ble.onConnectGATT = function (uuid) {
-  console.log('> connected GATT!');
-
-  document.getElementById('uuid_name').innerHTML = uuid;
-  document.getElementById('status').innerHTML = "connected GATT!";
-}
-
-//--------------------------------------------------
-//Write後の処理
-//--------------------------------------------------
-ble.onWrite = function(uuid){
-  document.getElementById('uuid_name').innerHTML = uuid;
-  document.getElementById('status').innerHTML = "written data"
-}
-
-
-var dynamicR = nipplejs.create({
-  zone: document.getElementById("zone_joystick_r"),
-  color: "blue",
-});
-var dynamicL = nipplejs.create({
-  zone: document.getElementById("zone_joystick_l"),
-  color: "red",
-});
-
-bindNipple()
-
-//-------------------------------------------------
-//ボタンが押された時のイベント登録
-//--------------------------------------------------
-document.getElementById('UP').addEventListener('mousedown', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data ="UP";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-document.getElementById('UP').addEventListener('mouseup', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data = "none";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-
-document.getElementById('DOWN').addEventListener('mousedown', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data ="DOWN";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-document.getElementById('DOWN').addEventListener('mouseup', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data = "none";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-
-document.getElementById('RIGHT').addEventListener('mousedown', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data ="RIGHT";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-document.getElementById('RIGHT').addEventListener('mouseup', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data = "none";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-
-document.getElementById('LEFT').addEventListener('mousedown', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data ="LEFT";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-document.getElementById('LEFT').addEventListener('mouseup', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data = "none";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-
-document.getElementById('UPRIGHT').addEventListener('mousedown', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data ="UPRIGHT";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-document.getElementById('UPRIGHT').addEventListener('mouseup', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data = "none";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-
-document.getElementById('DOWNRIGHT').addEventListener('mousedown', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data ="DOWNRIGHT";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-document.getElementById('DOWNRIGHT').addEventListener('mouseup', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data = "none";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-
-document.getElementById('UPLEFT').addEventListener('mousedown', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data ="UPLEFT";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-document.getElementById('UPLEFT').addEventListener('mouseup', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data = "none";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-document.getElementById('DOWNLEFT').addEventListener('mousedown', function() {
-  //フォーマットに従って値を変換
-  const textEncoder = new TextEncoder();
-  const text_data ="DOWNLEFT";
-  const text_data_encoded = textEncoder.encode(text_data);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-});
-document.getElementById('DOWNLEFT').addEventListener('mouseup', function() {
-  //フォーマットに従って値を変換
-  
-});
-
-function sendBLE(FBpower,LRpower){
-  const textEncoder = new TextEncoder();
-  const c_FBpower = FBpower;
-  const c_LRpower = LRpower;
-  const text_data_encoded = textEncoder.encode("OP "+c_FBpower+" "+c_LRpower);
-
-  //write
-  ble.write('UUID1', text_data_encoded);
-}
-
-
-function bindNipple() {
-    var FBpower = 0.0
-    var LRpower = 0.0
-    dynamicR
-      .on("start end", function (evt, data) {
-        // console.log("evt st:",JSON.stringify(evt))
-          FBpower=0.0
-          sendBLE(FBpower,LRpower)
-      })
-      .on("move", function (evt, data) {
-        // console.log("evt move:",JSON.stringify(evt))
-        console.log("evt move:", evt.target.nipples[0].frontPosition.y);
-        FBpower = evt.target.nipples[0].frontPosition.y
-        sendBLE(FBpower,LRpower)
-      })
-      .on(
-        "dir:up plain:up dir:left plain:left dir:down " +
-          "plain:down dir:right plain:right",
-        function (evt, data) {
-          // console.log("evt up:",JSON.stringify(evt))
-        }
-      )
-      .on("pressure", function (evt, data) {
-        //  console.log("evt press:",JSON.stringify(evt))
+        setInterval(send, 100);
+      };
+      document.getElementById("scan").addEventListener("click", function () {
+        ble.scan("UUID1");
       });
 
-    dynamicL
-      .on("start end", function (evt, data) {
-        // console.log("evt st:",JSON.stringify(evt))
-        LRpower = 0.0
-        sendBLE(FBpower,LRpower)
-      })
-      .on("move", function (evt, data) {
-        console.log("evt move:", evt.target.nipples[0].frontPosition.x);
-        LRpower = evt.target.nipples[0].frontPosition.x
-        sendBLE(FBpower,LRpower)
-      })
-      .on(
-        "dir:up plain:up dir:left plain:left dir:down " +
-          "plain:down dir:right plain:right",
-        function (evt, data) {
-          // console.log("evt up:",JSON.stringify(evt))
-        }
-      )
-      .on("pressure", function (evt, data) {
-        //  console.log("evt press:",JSON.stringify(evt))
-      });
-  }
+      //--------------------------------------------------
+      //ConnectGATT後の処理
+      //--------------------------------------------------
+      ble.onConnectGATT = function (uuid) {
+        console.log("> connected GATT!");
 
-</script>
-</body>
+        document.getElementById("uuid_name").innerHTML = uuid;
+        document.getElementById("status").innerHTML = "connected GATT!";
+      };
+
+      //--------------------------------------------------
+      //Write後の処理
+      //--------------------------------------------------
+      ble.onWrite = function (uuid) {
+        document.getElementById("uuid_name").innerHTML = uuid;
+        document.getElementById("status").innerHTML = "written data";
+      };
+
+      function sendBLE(FBpower, LRpower) {
+        const textEncoder = new TextEncoder();
+        const c_FBpower = FBpower;
+        const c_LRpower = LRpower;
+        const text_data_encoded = textEncoder.encode(
+          "OP " + c_FBpower + " " + c_LRpower
+        );
+
+        //write
+        ble.write("UUID1", text_data_encoded);
+      }
+
+      var dynamicR = nipplejs.create({
+        zone: document.getElementById("zone_joystick_r"),
+        color: "blue",
+      });
+      var dynamicL = nipplejs.create({
+        zone: document.getElementById("zone_joystick_l"),
+        color: "red",
+      });
+
+      bindNipple();
+
+      function bindNipple() {
+        dynamicR
+          .on("start end", function (evt, data) {
+            console.log("evt st:", JSON.stringify(evt));
+            FBpower = 0.0;
+            // 最初のスキャン用
+          })
+          .on("move", function (evt, data) {
+            // console.log("evt move:",JSON.stringify(evt))
+            console.log("evt move:", evt.target.nipples[0].frontPosition.y);
+            FBpower = evt.target.nipples[0].frontPosition.y;
+          })
+          .on(
+            "dir:up plain:up dir:left plain:left dir:down " +
+              "plain:down dir:right plain:right",
+            function (evt, data) {
+              FBpower = 0.0;
+              //console.log("evt up:",JSON.stringify(evt))
+            }
+          )
+          .on("pressure", function (evt, data) {
+            //  console.log("evt press:",JSON.stringify(evt))
+          });
+
+        dynamicL
+          .on("start end", function (evt, data) {
+            console.log("evt st:", JSON.stringify(evt));
+            LRpower = 0.0;
+          })
+          .on("move", function (evt, data) {
+            console.log("evt move:", evt.target.nipples[0].frontPosition.x);
+            LRpower = evt.target.nipples[0].frontPosition.x;
+          })
+          .on(
+            "dir:up plain:up dir:left plain:left dir:down " +
+              "plain:down dir:right plain:right",
+            function (evt, data) {
+              LRpower = 0.0;
+
+              //console.log("evt up:",JSON.stringify(evt))
+            }
+          )
+          .on("pressure", function (evt, data) {
+            //  console.log("evt press:",JSON.stringify(evt))
+          });
+      }
+    </script>
+  </body>
 </html>

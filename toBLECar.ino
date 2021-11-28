@@ -25,13 +25,13 @@
 #define SERVICE_UUID "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
-std::string command = "none 0";
+std::string command = "OP 0 0";
 
 class MyCallbacks : public BLECharacteristicCallbacks
 {
   void onRead(BLECharacteristic *pCharacteristic)
   {
-    pCharacteristic->setValue("Hello World!");
+    pCharacteristic->setValue("OP 0 0");
     Serial.println("onRead");
   }
 
@@ -49,7 +49,6 @@ class MyCallbacks : public BLECharacteristicCallbacks
 
 float FBpower = 0.0;
 float LRpower = 0.0;
-char buffer[33];
 
 void motorFB(int power)
 {
@@ -124,5 +123,7 @@ void loop()
   motorFB(floor(FBpower * 5.0));
   motorLR(floor(LRpower * 5.0));
 
+  FBpower = 0.0;
+  LRpower = 0.0;
   delay(10);
 }
