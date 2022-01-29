@@ -16,23 +16,29 @@ https://qiita.com/kmaepu/items/0c9400b2827e34e051fa
 
 https://monomonotech.jp/kurage/webbluetooth/getting_started.html
 
+
+
 # 組み立て方(ATOM Motion版)
+サーボモーターで転舵するパターンにご使用ください。
+こちらはM5Stack社の[ATOM Motion](https://www.switch-science.com/catalog/6993/)を使用します。
 M1ポートに前進・後進用のモーターを接続し、S1ポートにステア操作用のサーボを接続してください。
 
-| ATOM Motion |  アクチュエータ |
-| -> |-> |
+| ATOM　Motion |  アクチュエータ |
+----|---- 
 | M1+  | 前進・後進用モーターの前進側の端子 |
 | M1-  | 前進・後進用モーターの後進側の端子 |
 | S1 | サーボモーターのSignal端子 |
-| G  |  サーボモーターのGND端子 |
-| V  |  サーボモーターのVcc端子 |
+| G | サーボモーターのGND端子 |
+| V | サーボモーターのVcc端子 |
+
 
 # 組み立て方(その他ラジコン用)
-[DRV8835](https://akizukidenshi.com/catalog/g/gK-09848/)などのＤＣモータドライバを使用します。
+DCモーターと戻りバネを組み合わせて左右への全開転舵を行うパターンにご使用ください。
+こちらは[DRV8835](https://akizukidenshi.com/catalog/g/gK-09848/)などのＤＣモータドライバを使用します。
 下記の対応に合わせて結線してください。
 
 | ATOM | モータードライバ(IN) | モータードライバ(OUT) | アクチュエータ |
-| -> | -> | -> | -> |
+----|----|----|---- 
 | G19  | AIN1  | AOUT1 | 前進・後進用モーターの前進側の端子 |
 | G23  | AIN2  | AOUT2 | 前進・後進用モーターの後進側の端子 |
 | G22  | BIN1  | BOUT1 | ステア操作用モーターの右折側の端子 |
