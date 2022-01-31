@@ -94,6 +94,12 @@ Copyright 2017-2020 JellyWare Inc. All Rights Reserved.
       ble.onScan = function (deviceName) {
         document.getElementById("device_name").innerHTML = deviceName;
         document.getElementById("status").innerHTML = "found device!";
+
+        const send = function () {
+          sendBLE(FBpower, LRpower);
+        };
+
+        setInterval(send, 10);
       };
       document.getElementById("scan").addEventListener("click", function () {
         ble.scan("UUID1");
@@ -145,21 +151,18 @@ Copyright 2017-2020 JellyWare Inc. All Rights Reserved.
           .on("start end", function (evt, data) {
             console.log("evt st:", JSON.stringify(evt));
             FBpower = 0.0;
-            sendBLE(FBpower, LRpower)
             // 最初のスキャン用
           })
           .on("move", function (evt, data) {
             // console.log("evt move:",JSON.stringify(evt))
             console.log("evt move:", evt.target.nipples[0].frontPosition.y);
             FBpower = evt.target.nipples[0].frontPosition.y;
-            sendBLE(FBpower, LRpower)
           })
           .on(
             "dir:up plain:up dir:left plain:left dir:down " +
               "plain:down dir:right plain:right",
             function (evt, data) {
               FBpower = 0.0;
-              sendBLE(FBpower, LRpower)
               //console.log("evt up:",JSON.stringify(evt))
             }
           )
@@ -171,19 +174,16 @@ Copyright 2017-2020 JellyWare Inc. All Rights Reserved.
           .on("start end", function (evt, data) {
             console.log("evt st:", JSON.stringify(evt));
             LRpower = 0.0;
-            sendBLE(FBpower, LRpower)
           })
           .on("move", function (evt, data) {
             console.log("evt move:", evt.target.nipples[0].frontPosition.x);
             LRpower = evt.target.nipples[0].frontPosition.x;
-            sendBLE(FBpower, LRpower)
           })
           .on(
             "dir:up plain:up dir:left plain:left dir:down " +
               "plain:down dir:right plain:right",
             function (evt, data) {
               LRpower = 0.0;
-              sendBLE(FBpower, LRpower)
 
               //console.log("evt up:",JSON.stringify(evt))
             }
