@@ -72,6 +72,8 @@ Copyright 2017-2020 JellyWare Inc. All Rights Reserved.
       //--------------------------------------------------
       var FBpower = 0.0;
       var LRpower = 0.0;
+      var beforeFBpower = 0.0;
+      var beforeLRpower = 0.0;
 
       //BlueJellyのインスタンス生成
       const ble = new BlueJelly();
@@ -96,7 +98,19 @@ Copyright 2017-2020 JellyWare Inc. All Rights Reserved.
         document.getElementById("status").innerHTML = "found device!";
 
         const send = function () {
-          sendBLE(FBpower, LRpower);
+          if(beforeFBpower === FBpower && 
+            beforeLRpower === LRpower){
+              return
+          }
+
+          sendBLE(FBpower, LRpower)
+
+          if(beforeFBpower !== FBpower){
+            beforeFBpower = FBpower
+          }
+          if(beforeLRpower !== LRpower){
+            beforeLRpower = LRpower
+          }
         };
 
         setInterval(send, 10);
